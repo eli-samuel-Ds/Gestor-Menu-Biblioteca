@@ -1,0 +1,106 @@
+package services;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Autor;
+import model.Libro;
+
+public class GestionBiblioteca {
+
+	//Atributos
+	private List<Autor> listaAutoresCreados;
+	private List<Libro> listaLibroCreados;
+
+	//Constructor
+	public GestionBiblioteca() {
+		// TODO Auto-generated constructor stub
+		this.listaAutoresCreados = new ArrayList<Autor>();
+		this.listaLibroCreados = new ArrayList<Libro>();
+	}
+
+	//Acciones
+	public void agregarLibro(Libro nuevoLibro) {
+
+		listaLibroCreados.add(nuevoLibro);
+
+		Autor autorDelLibro = nuevoLibro.getAutor();
+
+		boolean autorExiste = false;
+
+		for (Autor autor : listaAutoresCreados) {
+			if (autor.equals(autorDelLibro)) {
+				autorExiste = true;
+			}
+			break;
+		}
+
+		if (!autorExiste) {
+			listaAutoresCreados.add(autorDelLibro);
+		}
+	}
+
+	public void editarLibro(Libro libro, String títuloNuevo, Autor autorNuevo, 
+			String generoNuevo, String descripcionNuevo) {
+
+		if (títuloNuevo != null && !títuloNuevo.isEmpty()) {
+			libro.setTítulo(títuloNuevo);
+		}
+
+		if (autorNuevo != null) {
+			libro.setAutor(autorNuevo);
+		}
+
+		if (generoNuevo != null && !generoNuevo.isEmpty()) {
+			libro.setGenero(generoNuevo);
+		}
+
+		if (descripcionNuevo != null) {
+			libro.setDescripcion(descripcionNuevo);
+		}
+	}
+
+	public void eliminarLibro(Libro libro) {
+		boolean eliminado = listaLibroCreados.removeIf(libroExistente -> libroExistente.equals(libro));
+
+		if (eliminado) {
+			System.out.println("Libro eliminado correctamente.");
+		} else {
+			System.out.println("El libro no se encontró en la lista.");
+		}
+	}
+
+	public List<Libro> buscarPorTitulo(String titulo) {
+		List<Libro> resultados = new ArrayList<>();
+		for (Libro libro : libros) {
+			if (libro.getTitulo().toLowerCase().contains(titulo.toLowerCase())) {
+				resultados.add(libro);
+			}
+		}
+		return resultados;
+	}
+
+	public List<Libro> buscarPorAutor(String nombreAutor) {
+		List<Libro> resultados = new ArrayList<>();
+		for (Libro libro : libros) {
+			if (libro.getAutor().toLowerCase().contains(nombreAutor.toLowerCase())) {
+				resultados.add(libro);
+			}
+		}
+		return resultados;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

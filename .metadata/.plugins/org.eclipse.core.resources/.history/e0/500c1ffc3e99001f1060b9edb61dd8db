@@ -1,0 +1,141 @@
+package view;
+
+import java.awt.EventQueue;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import model.Autor;
+import model.Libro;
+import services.GestionBiblioteca;
+
+public class formularioBiblioteca {
+
+    private JFrame GestorBiblioteca;
+    private GestionBiblioteca gestionBiblioteca;
+    private JTable tableLibros;
+    private DefaultTableModel tableModel;
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                formularioBiblioteca window = new formularioBiblioteca();
+                window.GestorBiblioteca.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public formularioBiblioteca() {
+        gestionBiblioteca = new GestionBiblioteca();
+        initialize();
+        actualizarTabla();  // Inicializar la tabla con datos
+    }
+
+    private void initialize() {
+        GestorBiblioteca = new JFrame();
+        GestorBiblioteca.setTitle("Gestor Biblioteca");
+        GestorBiblioteca.setBounds(100, 100, 600, 500);
+        GestorBiblioteca.setLocationRelativeTo(null);
+        GestorBiblioteca.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        GestorBiblioteca.getContentPane().add(panel);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JLabel lblTitulo = new JLabel("Título:");
+        JTextField txtTitulo = new JTextField();
+        JLabel lblAutorNombre = new JLabel("Nombre del Autor:");
+        JTextField txtAutorNombre = new JTextField();
+        JLabel lblAutorApellido = new JLabel("Apellido del Autor:");
+        JTextField txtAutorApellido = new JTextField();
+        JLabel lblGenero = new JLabel("Género:");
+        JTextField txtGenero = new JTextField();
+        JLabel lblDescripcion = new JLabel("Descripción:");
+        JTextField txtDescripcion = new JTextField();
+
+        JButton btnAgregar = new JButton("Agregar Libro");
+        JButton btnEditar = new JButton("Editar Libro");
+        JButton btnEliminar = new JButton("Eliminar Libro");
+        JButton btnBuscar = new JButton("Buscar Libro");
+
+        panel.add(lblTitulo);
+        panel.add(txtTitulo);
+        panel.add(lblAutorNombre);
+        panel.add(txtAutorNombre);
+        panel.add(lblAutorApellido);
+        panel.add(txtAutorApellido);
+        panel.add(lblGenero);
+        panel.add(txtGenero);
+        panel.add(lblDescripcion);
+        panel.add(txtDescripcion);
+        panel.add(btnAgregar);
+        panel.add(btnEditar);
+        panel.add(btnEliminar);
+        panel.add(btnBuscar);
+
+        // Crear el modelo de la tabla
+        tableModel = new DefaultTableModel(new Object[]{"Título", "Autor", "Género", "Descripción"}, 0);
+        tableLibros = new JTable(tableModel);
+
+        // Agregar la tabla en un JScrollPane para habilitar el scroll
+        JScrollPane scrollPane = new JScrollPane(tableLibros);
+        panel.add(scrollPane);
+
+        // Acción del botón "Agregar Libro"
+        btnAgregar.addActionListener(e -> {
+            Autor autor = new Autor(txtAutorNombre.getText(), txtAutorApellido.getText());
+            Libro nuevoLibro = new Libro(txtTitulo.getText(), autor, txtGenero.getText(), txtDescripcion.getText());
+            gestionBiblioteca.agregarLibro(nuevoLibro);
+            actualizarTabla();
+            JOptionPane.showMessageDialog(GestorBiblioteca, "Libro agregado exitosamente.");
+        });
+
+        // Acción del botón "Editar Libro"
+        btnEditar.addActionListener(e -> {
+            Autor autor = new Autor(txtAutorNombre.getText(), txtAutorApellido.getText());
+            Libro libroEditado = new Libro(txtTitulo.getText(), autor, txtGenero.getText(), txtDescripcion.getText());
+            if (gestionBiblioteca.editarLibro(txtTitulo.getText(), libroEditado)) {
+                actualizarTabla();
+                JOptionPane.showMessageDialog(GestorBiblioteca, "Libro editado exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(GestorBiblioteca, "Libro no encontrado.");
+            }
+        });
+
+        // Acción del botón "Eliminar Libro"
+        btnEliminar.addActionListener(e -> {
+            if (gestionBiblioteca.eliminarLibro(txtTitulo.getText())) {
+                actualizarTabla();
+                JOptionPane.showMessageDialog(GestorBiblioteca, "Libro eliminado exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(GestorBiblioteca, "Libro no encontrado.");
+            }
+        });
+
+        // Acción del botón "Buscar Libro"
+        btnBuscar.addActionListener(e -> {
+            Libro libro = gestionBiblioteca.buscarLibro(txtTitulo.getText());
+            if (libro != null) {
+                txtAutorNombre.setText(libro.getAutor().getNombre());
+                txtAutorApellido.setText(libro.getAutor().getApellido());
+                txtGenero.setText(libro.getGenero());
+                txtDescripcion.setText(libro.getDescripcion());
+                JOptionPane.showMessageDialog(GestorBiblioteca, "Libro encontrado.");
+            } else {
+                JOptionPane.showMessageDialog(GestorBiblioteca, "Libro no encontrado.");
+            }
+        });
+    }
+
+    private void actualizarTabla() {
+        // Limpiar la tabla antes de actualizarla
+        tableModel.setRowCount(0);
+
+        // Recorrer los libros en gestionBiblioteca y agregarlos a la tabla
+        for (Libro libro : gestionBiblioteca.getLibros()) {
+            Object[] rowData = {libro.getTitulo(), libro.getAutor().getNombre() + " " + libro.getAutor().getApellido(),
+                    libro.getGenero(), libro.getDescripcion()};
+            tableModel.addRow(rowData);
+        }
+    }
+}

@@ -1,0 +1,52 @@
+package model;
+
+public class Libro {
+	
+	//Atributos
+	private String título;
+	private Autor autor;
+	private String genero;
+	private String descripción;
+	
+	//Constructor
+	public Libro(String tituloLibro, Autor autorLibro, String generoLibro, String descripciónLibro) {
+		// TODO Auto-generated constructor stub
+		this.título = tituloLibro;
+		this.autor = autorLibro;
+		this.genero = generoLibro;
+		this.descripción = descripciónLibro;
+	}
+
+	//Metodos GET Y SET
+	public String getTítulo() {
+		return título;
+	}
+
+	public void setTítulo(String título) {
+		this.título = título;
+	}
+
+	public Autor getAutor() {
+		return autor;
+	}
+
+	public void setAutor(Autor autor) {
+		this.autor = autor;
+	}
+
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String género) {
+		this.genero = género;
+	}
+
+	public String getDescripción() {
+		return descripción;
+	}
+
+	public void setDescripción(String descripción) {
+		this.descripción = descripción;
+	}
+}

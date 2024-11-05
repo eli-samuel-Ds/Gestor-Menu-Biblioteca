@@ -1,0 +1,45 @@
+package services;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Autor;
+import model.Libro;
+
+public class GestionBiblioteca {
+
+	//Atributos
+	@SuppressWarnings("rawtypes")
+	private List<Autor> listaAutoresCreados;
+	private List<Libro> listaLibroCreados;
+
+	//Constructor
+	@SuppressWarnings("rawtypes")
+	public GestionBiblioteca() {
+		this.listaAutoresCreados = new ArrayList<Autor>();
+		this.listaLibroCreados = new ArrayList<Libro>();
+	}
+
+	//Acciones
+	@SuppressWarnings("rawtypes")
+	public void agregarLibro(Libro nuevoLibro) {
+
+		listaLibroCreados.add(nuevoLibro);
+
+		Autor autorDelLibro = nuevoLibro.getAutor();
+
+		boolean autorExiste = false;
+
+		for (Autor autor : listaAutoresCreados) {
+			if (autor.equals(autorDelLibro)) {
+				autorExiste = true;
+			}
+			break;
+		}
+
+		if (!autorExiste) {
+			listaAutoresCreados.add(autorDelLibro);
+		}
+
+	}
+}

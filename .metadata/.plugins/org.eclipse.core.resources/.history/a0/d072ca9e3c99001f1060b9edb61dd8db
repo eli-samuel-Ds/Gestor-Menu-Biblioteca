@@ -1,0 +1,47 @@
+package view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import java.awt.Window.Type;
+
+public class formularioBiblioteca {
+
+	private JFrame GestorBiblioteca;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					formularioBiblioteca window = new formularioBiblioteca();
+					window.GestorBiblioteca.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public formularioBiblioteca() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		GestorBiblioteca = new JFrame();
+		GestorBiblioteca.setTitle("Gesto Biblioteca");
+		GestorBiblioteca.setType(Type.UTILITY);
+		GestorBiblioteca.setBounds(100, 100, 450, 300);
+		GestorBiblioteca.setLocationRelativeTo(null);
+		GestorBiblioteca.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+}

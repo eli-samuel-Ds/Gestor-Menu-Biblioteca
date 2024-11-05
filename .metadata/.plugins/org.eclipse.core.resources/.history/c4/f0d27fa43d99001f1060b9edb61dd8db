@@ -1,0 +1,160 @@
+package view;
+
+import java.awt.EventQueue;
+import javax.swing.*;
+import model.Autor;
+import model.Libro;
+import services.GestionBiblioteca;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class formularioBiblioteca {
+
+    private JFrame GestorBiblioteca;
+    private GestionBiblioteca gestionBiblioteca;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    formularioBiblioteca window = new formularioBiblioteca();
+                    window.GestorBiblioteca.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Create the application.
+     */
+    public formularioBiblioteca() {
+        gestionBiblioteca = new GestionBiblioteca();
+        initialize();
+    }
+
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        GestorBiblioteca = new JFrame();
+        GestorBiblioteca.setTitle("Gestor Biblioteca");
+        GestorBiblioteca.setBounds(100, 100, 500, 400);
+        GestorBiblioteca.setLocationRelativeTo(null);
+        GestorBiblioteca.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // Layout and components
+        JPanel panel = new JPanel();
+        GestorBiblioteca.getContentPane().add(panel);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
+        // Input fields for book data
+        JLabel lblTitulo = new JLabel("Título:");
+        JTextField txtTitulo = new JTextField();
+        JLabel lblAutorNombre = new JLabel("Nombre del Autor:");
+        JTextField txtAutorNombre = new JTextField();
+        JLabel lblAutorApellido = new JLabel("Apellido del Autor:");
+        JTextField txtAutorApellido = new JTextField();
+        JLabel lblGenero = new JLabel("Género:");
+        JTextField txtGenero = new JTextField();
+        JLabel lblDescripcion = new JLabel("Descripción:");
+        JTextField txtDescripcion = new JTextField();
+
+        // Buttons
+        JButton btnAgregar = new JButton("Agregar Libro");
+        JButton btnEditar = new JButton("Editar Libro");
+        JButton btnEliminar = new JButton("Eliminar Libro");
+        JButton btnBuscar = new JButton("Buscar Libro");
+        
+        // Add components to panel
+        panel.add(lblTitulo);
+        panel.add(txtTitulo);
+        panel.add(lblAutorNombre);
+        panel.add(txtAutorNombre);
+        panel.add(lblAutorApellido);
+        panel.add(txtAutorApellido);
+        panel.add(lblGenero);
+        panel.add(txtGenero);
+        panel.add(lblDescripcion);
+        panel.add(txtDescripcion);
+        panel.add(btnAgregar);
+        panel.add(btnEditar);
+        panel.add(btnEliminar);
+        panel.add(btnBuscar);
+        
+        // Action for adding a book
+        btnAgregar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String titulo = txtTitulo.getText();
+                String autorNombre = txtAutorNombre.getText();
+                String autorApellido = txtAutorApellido.getText();
+                String genero = txtGenero.getText();
+                String descripcion = txtDescripcion.getText();
+
+                Autor autor = new Autor(autorNombre, autorApellido);
+                Libro nuevoLibro = new Libro(titulo, autor, genero, descripcion);
+                gestionBiblioteca.agregarLibro(nuevoLibro);
+
+                JOptionPane.showMessageDialog(GestorBiblioteca, "Libro agregado exitosamente.");
+            }
+        });
+
+        // Action for editing a book
+        btnEditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String titulo = txtTitulo.getText();
+                String autorNombre = txtAutorNombre.getText();
+                String autorApellido = txtAutorApellido.getText();
+                String genero = txtGenero.getText();
+                String descripcion = txtDescripcion.getText();
+
+                Autor autor = new Autor(autorNombre, autorApellido);
+                Libro libroEditado = new Libro(titulo, autor, genero, descripcion);
+                
+                if (gestionBiblioteca.editarLibro(titulo, libroEditado)) {
+                    JOptionPane.showMessageDialog(GestorBiblioteca, "Libro editado exitosamente.");
+                } else {
+                    JOptionPane.showMessageDialog(GestorBiblioteca, "Libro no encontrado.");
+                }
+            }
+        });
+
+        // Action for deleting a book
+        btnEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String titulo = txtTitulo.getText();
+                if (gestionBiblioteca.eliminarLibro(titulo)) {
+                    JOptionPane.showMessageDialog(GestorBiblioteca, "Libro eliminado exitosamente.");
+                } else {
+                    JOptionPane.showMessageDialog(GestorBiblioteca, "Libro no encontrado.");
+                }
+            }
+        });
+
+        // Action for searching a book
+        btnBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String titulo = txtTitulo.getText();
+                Libro libro = gestionBiblioteca.buscarLibro(titulo);
+                if (libro != null) {
+                    txtTitulo.setText(libro.getTitulo());
+                    txtAutorNombre.setText(libro.getAutor().getNombre());
+                    txtAutorApellido.setText(libro.getAutor().getApellido());
+                    txtGenero.setText(libro.getGenero());
+                    txtDescripcion.setText(libro.getDescripcion());
+                    JOptionPane.showMessageDialog(GestorBiblioteca, "Libro encontrado.");
+                } else {
+                    JOptionPane.showMessageDialog(GestorBiblioteca, "Libro no encontrado.");
+                }
+            }
+        });
+    }
+}

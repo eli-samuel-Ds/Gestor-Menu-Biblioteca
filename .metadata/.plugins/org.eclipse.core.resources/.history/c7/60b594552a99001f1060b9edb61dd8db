@@ -1,0 +1,44 @@
+package model;
+
+import java.util.List;
+
+public class Autor<E> {
+
+	//Atributos
+	private String nombre; 
+	private String apellido;
+	private List<String> listaLibros;
+
+	//Constructor
+	public Autor(String nombreAutor, String apellidoAutor, List<String> listaLibrosAutor) {
+		// TODO Auto-generated constructor stub
+		this.nombre = nombreAutor;
+		this.apellido = apellidoAutor;
+		this.listaLibros = listaLibrosAutor;
+	}
+
+	//Metodo GET Y SET
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public List<String> getListaLibros() {
+		return listaLibros;
+	}
+
+	public void setListaLibros(List<String> listaLibros) {
+		this.listaLibros = listaLibros;
+	}
+}
